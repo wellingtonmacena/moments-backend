@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Moments_Backend.Interfaces;
 using Moments_Backend.Models;
 using Moments_Backend.Repositories.Interfaces;
-using Moments_Backend.Services;
 
 namespace Moments_Backend.Controllers
 {
@@ -9,37 +9,78 @@ namespace Moments_Backend.Controllers
     [Route("api/v1/moments")]
     public class MomentsController : Controller
     {
-        private IMomentRepository _postgresCommentRepository { get; set; }
+        private IMomentRepository _postgresMomentRepository { get; set; }
         private IConfiguration _configuration { get; set; }
-        public MomentsController(IMomentRepository postgresCommentRepository, IConfiguration configuration)
+        private ISaveFile _iSaveFileService { get; set; }
+        public MomentsController(IMomentRepository postgresMomentRepository, IConfiguration configuration, ISaveFile iSaveFile)
         {
-            _postgresCommentRepository = postgresCommentRepository;
+            _postgresMomentRepository = postgresMomentRepository;
             _configuration = configuration;
+            _iSaveFileService = iSaveFile;
+        }
+
+        [HttpGet]
+        [Route("/{id}")]
+        public ActionResult GetOne([FromRoute] int id)
+        {
+            Moment moment = _postgresMomentRepository.GetOne(id);
+
+            if (moment == null)
+                return NotFound();
+            else
+                return Ok( moment);
         }
 
         [HttpGet]
         public ActionResult GetAll()
         {
-            return Ok(_postgresCommentRepository.GetAll());
+            List<Moment> moments = _postgresMomentRepository.GetAll();
+
+            if (moments.Any())
+                return Ok(moments);
+            else
+                return NoContent();
         }
 
         [HttpPost]
-
         public ActionResult CreateOne(IFormFile imageFile, [FromForm] Moment moment)
         {
-            SaveFileService saveFileService = new SaveFileService(_configuration);
+            if (!imageFile.ContentType.Contains("image"))
+                return StatusCode(415, new { Message = "Only accepts image type file" });
 
-            string imageUrl = saveFileService.Execute(imageFile).Result ;
-            moment.ImageURL = imageUrl;
+            moment.ImageURL = _iSaveFileService.Execute(imageFile).Result;
+            _postgresMomentRepository.CreateOne(moment);
 
-            return null;
-            //return Ok(_postgresCommentRepository.CreateOne((Moment)moment));
+            return Created("", moment);
+        }
+
+        [HttpPut]
+        public ActionResult UpdateOne([FromForm] Moment moment)
+        {
+            bool wasUpdated = _postgresMomentRepository.UpdateOne(moment);
+
+            if (wasUpdated)
+                return NotFound();
+            else
+                return Ok();
         }
 
         [HttpDelete]
-        public ActionResult DeleteAll()
+        [Route("/{id}")]
+        public ActionResult DeleteOne([FromRoute] int id)
         {
-            return Ok(_postgresCommentRepository.DeleteAll());
+            bool moment = _postgresMomentRepository.DeleteOne(id);
+
+            if (!moment)
+                return NotFound();
+            else
+                return Ok();
         }
+
+        //[HttpDelete]
+        //public ActionResult DeleteAll()
+        //{
+        //    // return Ok(_postgresCommentRepository.DeleteAll());
+        //}
     }
 }

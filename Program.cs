@@ -1,5 +1,8 @@
+using Microsoft.Extensions.FileProviders;
+using Moments_Backend.Interfaces;
 using Moments_Backend.Repositories;
 using Moments_Backend.Repositories.Interfaces;
+using Moments_Backend.Services;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +24,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddTransient<ICommentRepository, PostgresCommentRepository>();
 builder.Services.AddTransient<IMomentRepository, PostgresMomentRepository>();
+builder.Services.AddTransient<ISaveFile, LocalSaveFileService>();
 
 var app = builder.Build();
 
@@ -32,7 +36,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine( Environment.CurrentDirectory, "Uploads")),
+    RequestPath = "/Uploads"
+});
 app.MapControllers();
 
 app.Run();

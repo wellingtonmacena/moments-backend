@@ -4,11 +4,11 @@ namespace Moments_Backend.Repositories.Interfaces
 {
     public interface IMomentRepository
     {
-        Moment GetOne(string id);
+        Moment GetOne(int id);
         List<Moment> GetAll();
-        bool CreateOne(Moment moment);
+        Moment CreateOne(Moment moment);
         bool UpdateOne(Moment moment);
-        bool DeleteOne(Moment moment);
+        bool DeleteOne(int id);
         bool DeleteAll();
     }
 }

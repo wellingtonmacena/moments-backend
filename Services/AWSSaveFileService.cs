@@ -1,12 +1,14 @@
 ﻿using Amazon;
 using Amazon.S3;
 using Amazon.S3.Transfer;
+using Moments_Backend.Interfaces;
+using Moments_Backend.Utils;
 
 namespace Moments_Backend.Services
 {
-    public class SaveFileService
+    public class AWSSaveFileService : ISaveFile
     {
-        public SaveFileService(IConfiguration configuration)
+        public AWSSaveFileService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -15,11 +17,9 @@ namespace Moments_Backend.Services
 
         public async Task<string> Execute(IFormFile imageFile)
         {
-
-            string accessKeyId = _configuration.GetValue<string>("AWS-S3:AccessKeyId");
-            string secretKeyId = _configuration.GetValue<string>("AWS-S3:SecretKeyId");
-            string bucketName = _configuration.GetValue<string>("AWS-S3:BucketName");
-
+            string accessKeyId = _configuration.GetValue<string>("AWS-S3:PRD:AccessKeyId");
+            string secretKeyId = _configuration.GetValue<string>("AWS-S3:PRD:SecretKeyId");
+            string bucketName = _configuration.GetValue<string>("AWS-S3:PRD:BucketName");
 
             using (var amazonS3client = new AmazonS3Client(accessKeyId, secretKeyId, RegionEndpoint.USEast2))
             {
@@ -32,23 +32,22 @@ namespace Moments_Backend.Services
                     {
                         InputStream = memoryStream,
                         // File name
-                        Key = imageFile.FileName,
+                        Key = ImageUtils.GenerateNewFilename(imageFile.FileName),
                         // S3 bucket name
                         BucketName = bucketName,
                         // File content type
                         ContentType = imageFile.ContentType,
-                        
-                        
+                        StorageClass = S3StorageClass.StandardInfrequentAccess,
+                        PartSize = imageFile.Length,
+                        CannedACL = S3CannedACL.PublicRead,
                     };
 
                     var transferUtility = new TransferUtility(amazonS3client);
                     await transferUtility.UploadAsync(request);
-                    
+
+                    return $"https://{bucketName}.s3.us-east-2.amazonaws.com/{request.Key}";
                 }
             }
-
-            return "";
-
         }
     }
 }

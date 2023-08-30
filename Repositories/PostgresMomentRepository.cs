@@ -14,17 +14,29 @@ namespace Moments_Backend.Repositories
             _appDbContext = new AppDbContext(configuration);
         }
 
-        public bool CreateOne(Moment moment)
+        public Moment CreateOne(Moment moment)
         {
             _appDbContext.Moments.Add(moment);
-            //_appDbContext.SaveChanges();
+            _appDbContext.SaveChanges();
 
-            return true;
+            return moment;
         }
 
-        public bool DeleteOne(Moment moment)
+        public bool DeleteOne(int id)
         {
-            throw new NotImplementedException();
+            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
+
+            if (foundMoment != null)
+            {
+                _appDbContext.Moments.Remove(foundMoment);
+                _appDbContext.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool DeleteAll()
@@ -41,14 +53,28 @@ namespace Moments_Backend.Repositories
             return moments;
         }
 
-        public Moment GetOne(string id)
+        public Moment GetOne(int id)
         {
-            throw new NotImplementedException();
+            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
+
+            return foundMoment;
         }
 
         public bool UpdateOne(Moment moment)
         {
-            throw new NotImplementedException();
+            Moment foundMoment = _appDbContext.Moments.First(item => item.Id.Equals(moment.Id));
+
+            if (foundMoment != null)
+            {
+                _appDbContext.Moments.Update(foundMoment);
+                _appDbContext.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
