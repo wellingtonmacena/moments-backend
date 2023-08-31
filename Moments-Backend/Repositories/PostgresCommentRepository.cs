@@ -1,4 +1,5 @@
-﻿using Moments_Backend.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Moments_Backend.Data;
 using Moments_Backend.Models;
 using Moments_Backend.Repositories.Interfaces;
 
@@ -6,11 +7,11 @@ namespace Moments_Backend.Repositories
 {
     public class PostgresCommentRepository: ICommentRepository
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly DbContext _appDbContext;
         //Func<Transaction, Transaction> WhereEmpty = (x) => x;
         public PostgresCommentRepository(IConfiguration configuration)
         {
-            _appDbContext = new AppDbContext(configuration);
+            _appDbContext = new LocalPostgresContext(configuration);
         }
 
         public bool CreateOne(Comment moment)

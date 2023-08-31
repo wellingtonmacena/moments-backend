@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moments_Backend.Interfaces;
 using Moments_Backend.Models;
+using Moments_Backend.Models.DTOs;
 using Moments_Backend.Repositories.Interfaces;
 
 namespace Moments_Backend.Controllers
@@ -11,12 +12,12 @@ namespace Moments_Backend.Controllers
     {
         private IMomentRepository _postgresMomentRepository { get; set; }
         private IConfiguration _configuration { get; set; }
-        private ISaveFile _iSaveFileService { get; set; }
-        public MomentsController(IMomentRepository postgresMomentRepository, IConfiguration configuration, ISaveFile iSaveFile)
+        private IHandleFile _iHandleFileService { get; set; }
+        public MomentsController(IMomentRepository postgresMomentRepository, IConfiguration configuration, IHandleFile iHandleFileService)
         {
             _postgresMomentRepository = postgresMomentRepository;
             _configuration = configuration;
-            _iSaveFileService = iSaveFile;
+            _iHandleFileService = iHandleFileService;
         }
 
         [HttpGet]
@@ -28,7 +29,7 @@ namespace Moments_Backend.Controllers
             if (moment == null)
                 return NotFound();
             else
-                return Ok( moment);
+                return Ok(moment);
         }
 
         [HttpGet]
@@ -43,12 +44,15 @@ namespace Moments_Backend.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateOne(IFormFile imageFile, [FromForm] Moment moment)
+        public async Task<ActionResult> CreateOne(IFormFile imageFile, [FromForm] Moment moment)
         {
             if (!imageFile.ContentType.Contains("image"))
                 return StatusCode(415, new { Message = "Only accepts image type file" });
 
-            moment.ImageURL = _iSaveFileService.Execute(imageFile).Result;
+            HandleFileDTO handleFileDTO = await _iHandleFileService.Save(imageFile);
+            moment.ImageURL = handleFileDTO.ImageURL;
+            moment.ImagePath = handleFileDTO.ImagePath;
+
             _postgresMomentRepository.CreateOne(moment);
 
             return Created("", moment);
@@ -69,12 +73,18 @@ namespace Moments_Backend.Controllers
         [Route("/{id}")]
         public ActionResult DeleteOne([FromRoute] int id)
         {
-            bool moment = _postgresMomentRepository.DeleteOne(id);
+            Moment moment = _postgresMomentRepository.DeleteOne(id);
 
-            if (!moment)
+            if (moment == null)
+            {
                 return NotFound();
+            }
             else
+            {
+                _iHandleFileService.Delete(moment.ImagePath);
                 return Ok();
+            }
+
         }
 
         //[HttpDelete]

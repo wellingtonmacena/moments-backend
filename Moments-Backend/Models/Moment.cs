@@ -24,6 +24,10 @@ namespace Moments_Backend.Models
         [Column("image_url")]
         public string ImageURL { get; set; }
 
+        [DefaultValue("teste")]
+        [Column("image_path")]
+        public string ImagePath { get; set; }
+
         [Column("created_at")]
         [DefaultValue("2023-08-27 16:54:20.644 -0300")]
         public DateTime CreatedAt { get; set; }
@@ -31,12 +35,14 @@ namespace Moments_Backend.Models
         [Column("updated_at")]
         [DefaultValue("2023-08-27 16:54:20.644 -0300")]
         public DateTime UpdatedAt { get; set; }
-        public Moment(int id, string title, string description, string imageURL, DateTime createdAt, DateTime updatedAt)
+
+        public Moment(int id, string title, string description, string imageURL, string imageName, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             Title = title;
             Description = description;
             ImageURL = imageURL;
+            ImagePath = imageName;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
         }
@@ -52,6 +58,7 @@ namespace Moments_Backend.Models
             stringBuilder.AppendLine($"Title: {Title},  ");
             stringBuilder.AppendLine($"Description: {Description},  ");
             stringBuilder.AppendLine($"ImageURL: {ImageURL},  ");
+            stringBuilder.AppendLine($"ImagePath: {ImagePath},  ");
             stringBuilder.AppendLine($"CreatedAt: {CreatedAt},  ");
             stringBuilder.AppendLine($"UpdatedAt: {UpdatedAt}}}");
 

@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Moments_Backend.Data;
 using Moments_Backend.Interfaces;
 using Moments_Backend.Repositories;
 using Moments_Backend.Repositories.Interfaces;
@@ -17,14 +19,14 @@ builder.Services.AddControllers()
            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
        });
 
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<AppDbContext, LocalPostgresContext>();
 builder.Services.AddTransient<ICommentRepository, PostgresCommentRepository>();
 builder.Services.AddTransient<IMomentRepository, PostgresMomentRepository>();
-builder.Services.AddTransient<ISaveFile, LocalSaveFileService>();
+builder.Services.AddTransient<IHandleFile, AWSHandleFileService>();
 
 var app = builder.Build();
 

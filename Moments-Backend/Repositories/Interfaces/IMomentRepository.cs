@@ -8,7 +8,7 @@ namespace Moments_Backend.Repositories.Interfaces
         List<Moment> GetAll();
         Moment CreateOne(Moment moment);
         bool UpdateOne(Moment moment);
-        bool DeleteOne(int id);
+        Moment DeleteOne(int id);
         bool DeleteAll();
     }
 }

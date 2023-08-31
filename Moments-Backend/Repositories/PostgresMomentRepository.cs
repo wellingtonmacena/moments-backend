@@ -9,9 +9,9 @@ namespace Moments_Backend.Repositories
     {
         private readonly AppDbContext _appDbContext;
         //Func<Transaction, Transaction> WhereEmpty = (x) => x;
-        public PostgresMomentRepository(IConfiguration configuration)
+        public PostgresMomentRepository(AppDbContext appDbContext)
         {
-            _appDbContext = new AppDbContext(configuration);
+            _appDbContext = appDbContext;
         }
 
         public Moment CreateOne(Moment moment)
@@ -21,31 +21,7 @@ namespace Moments_Backend.Repositories
 
             return moment;
         }
-
-        public bool DeleteOne(int id)
-        {
-            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
-
-            if (foundMoment != null)
-            {
-                _appDbContext.Moments.Remove(foundMoment);
-                _appDbContext.SaveChanges();
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool DeleteAll()
-        {
-            _appDbContext.Moments.ExecuteDelete();
-            _appDbContext.SaveChanges();
-            return true;
-        }
-
+       
         public List<Moment> GetAll()
         {
             List<Moment> moments = _appDbContext.Moments.ToList();
@@ -75,6 +51,30 @@ namespace Moments_Backend.Repositories
             {
                 return false;
             }
+        }
+
+        public Moment DeleteOne(int id)
+        {
+            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
+
+            if (foundMoment != null)
+            {
+                _appDbContext.Moments.Remove(foundMoment);
+                _appDbContext.SaveChanges();
+
+                return foundMoment;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public bool DeleteAll()
+        {
+            _appDbContext.Moments.ExecuteDelete();
+            _appDbContext.SaveChanges();
+            return true;
         }
     }
 }
