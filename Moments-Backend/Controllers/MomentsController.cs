@@ -63,7 +63,7 @@ namespace Moments_Backend.Controllers
         {
             bool wasUpdated = _postgresMomentRepository.UpdateOne(moment);
 
-            if (wasUpdated)
+            if (!wasUpdated)
                 return NotFound();
             else
                 return Ok();

@@ -42,6 +42,9 @@ namespace Moments_Backend.Repositories
 
             if (foundMoment != null)
             {
+                foundMoment.Title = moment.Title;
+                foundMoment.Description = moment.Description;
+                foundMoment.UpdatedAt= DateTime.UtcNow;
                 _appDbContext.Moments.Update(foundMoment);
                 _appDbContext.SaveChanges();
 
