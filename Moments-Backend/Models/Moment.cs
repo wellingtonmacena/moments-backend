@@ -42,13 +42,15 @@ namespace Moments_Backend.Models
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
 
-        
         [JsonIgnore]
         [Column("updated_at")]
         [DefaultValue("2023-08-27 16:54:20.644 -0300")]
         [JsonProperty("updated_at")]
         public DateTime UpdatedAt { get; set; }
+        [JsonProperty("comments")]
+        public List<Comment>? Comments { get; set; }
 
+  
         public Moment(int id, string title, string description, string imageURL, string imageName, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
@@ -62,6 +64,15 @@ namespace Moments_Backend.Models
 
         public Moment()
         {
+        }
+
+        public Moment(int id, string title, string description, string? imageURL, DateTime createdAt)
+        {
+            Id = id;
+            Title = title;
+            Description = description;
+            ImageURL = imageURL;
+            CreatedAt = createdAt;
         }
 
         public override string? ToString()

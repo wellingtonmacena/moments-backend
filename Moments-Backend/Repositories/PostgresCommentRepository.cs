@@ -7,26 +7,31 @@ namespace Moments_Backend.Repositories
 {
     public class PostgresCommentRepository: ICommentRepository
     {
-        private readonly DbContext _appDbContext;
-        //Func<Transaction, Transaction> WhereEmpty = (x) => x;
+        private readonly AppDbContext _appDbContext;
         public PostgresCommentRepository(IConfiguration configuration)
         {
             _appDbContext = new LocalPostgresContext(configuration);
         }
 
-        public bool CreateOne(Comment moment)
+        public Comment CreateOne(Comment comment)
+        {
+            _appDbContext.Comments.Add(comment);
+            _appDbContext.SaveChanges();
+
+            return comment;
+        }
+
+        public bool DeleteOne(Comment comment)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteOne(Comment moment)
+        public List<Comment> GetAllByMomentId(string momentId)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<Comment> GetAll()
-        {
-            throw new NotImplementedException();
+            List<Comment> comments = _appDbContext.Comments
+                                                  .ToList()
+                                                  .Where(item => item.MomentId.Equals(momentId)).ToList();
+            return comments;
         }
 
         public Comment GetOne(string id)
@@ -34,7 +39,7 @@ namespace Moments_Backend.Repositories
             throw new NotImplementedException();
         }
 
-        public bool UpdateOne(Comment moment)
+        public bool UpdateOne(Comment comment)
         {
             throw new NotImplementedException();
         }

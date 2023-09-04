@@ -21,10 +21,22 @@ namespace Moments_Backend.Repositories
 
             return moment;
         }
-       
+
         public List<Moment> GetAll()
         {
-            List<Moment> moments = _appDbContext.Moments.ToList();
+            List<Moment> moments = _appDbContext.Moments
+                                                //.Select(item => new Moment(item.Id, item.Title, item.Description, item.ImageURL, item.CreatedAt))
+                                                .ToList();
+
+            foreach (Moment moment in moments)
+            {
+                List<Comment> comments = _appDbContext.Comments
+                                                  .Where(item => item.MomentId.Equals(moment.Id))
+                                                  //.Select(item => new Comment(item.Id, item.Text, item.CreatedAt))
+                                                  .ToList();
+
+                moment.Comments = comments;
+            }
 
             return moments;
         }
@@ -32,6 +44,11 @@ namespace Moments_Backend.Repositories
         public Moment GetOne(int id)
         {
             Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
+
+            foundMoment.Comments = _appDbContext.Comments
+                                                  .ToList()
+                                                  .Where(item => item.MomentId.Equals(foundMoment.Id))
+                                                  .ToList();
 
             return foundMoment;
         }
@@ -44,7 +61,7 @@ namespace Moments_Backend.Repositories
             {
                 foundMoment.Title = moment.Title;
                 foundMoment.Description = moment.Description;
-                foundMoment.UpdatedAt= DateTime.UtcNow;
+                foundMoment.UpdatedAt = DateTime.UtcNow;
                 _appDbContext.Moments.Update(foundMoment);
                 _appDbContext.SaveChanges();
 

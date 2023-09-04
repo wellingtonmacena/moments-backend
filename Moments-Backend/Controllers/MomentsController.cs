@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting.Internal;
 using Moments_Backend.Interfaces;
 using Moments_Backend.Models;
 using Moments_Backend.Models.DTOs;
 using Moments_Backend.Repositories.Interfaces;
-using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace Moments_Backend.Controllers
 {
@@ -14,12 +11,10 @@ namespace Moments_Backend.Controllers
     public class MomentsController : Controller
     {
         private IMomentRepository _postgresMomentRepository { get; set; }
-        private IConfiguration _configuration { get; set; }
         private IHandleFile _iHandleFileService { get; set; }
-        public MomentsController(IMomentRepository postgresMomentRepository, IConfiguration configuration, IHandleFile iHandleFileService)
+        public MomentsController(IMomentRepository postgresMomentRepository, IHandleFile iHandleFileService)
         {
             _postgresMomentRepository = postgresMomentRepository;
-            _configuration = configuration;
             _iHandleFileService = iHandleFileService;
         }
 
@@ -47,7 +42,7 @@ namespace Moments_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateOne([FromForm] IFormFile image,  [FromForm] Moment moment)
+        public async Task<ActionResult> CreateOne([FromForm] IFormFile image, [FromForm] Moment moment)
         {
 
             if (!image.ContentType.Contains("image"))
