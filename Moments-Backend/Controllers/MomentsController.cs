@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting.Internal;
 using Moments_Backend.Interfaces;
 using Moments_Backend.Models;
 using Moments_Backend.Models.DTOs;
 using Moments_Backend.Repositories.Interfaces;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Moments_Backend.Controllers
 {
@@ -21,7 +24,7 @@ namespace Moments_Backend.Controllers
         }
 
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ActionResult GetOne([FromRoute] int id)
         {
             Moment moment = _postgresMomentRepository.GetOne(id);
@@ -29,7 +32,7 @@ namespace Moments_Backend.Controllers
             if (moment == null)
                 return NotFound();
             else
-                return Ok(moment);
+                return Ok(new { data = moment });
         }
 
         [HttpGet]
@@ -38,20 +41,20 @@ namespace Moments_Backend.Controllers
             List<Moment> moments = _postgresMomentRepository.GetAll();
 
             if (moments.Any())
-                return Ok(moments);
+                return Ok(new { data = moments });
             else
                 return NoContent();
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateOne(IFormFile imageFile, [FromForm] Moment moment)
+        public async Task<ActionResult> CreateOne([FromForm] IFormFile image,  [FromForm] Moment moment)
         {
-            if (!imageFile.ContentType.Contains("image"))
+
+            if (!image.ContentType.Contains("image"))
                 return StatusCode(415, new { Message = "Only accepts image type file" });
 
-            HandleFileDTO handleFileDTO = await _iHandleFileService.Save(imageFile);
-            moment.ImageURL = handleFileDTO.ImageURL;
-            moment.ImagePath = handleFileDTO.ImagePath;
+            HandleFileDTO handleFileDTO = await _iHandleFileService.Save(image);
+            moment.SetCreationInfo(handleFileDTO);
 
             _postgresMomentRepository.CreateOne(moment);
 
@@ -70,7 +73,7 @@ namespace Moments_Backend.Controllers
         }
 
         [HttpDelete]
-        [Route("/{id}")]
+        [Route("{id}")]
         public ActionResult DeleteOne([FromRoute] int id)
         {
             Moment moment = _postgresMomentRepository.DeleteOne(id);
