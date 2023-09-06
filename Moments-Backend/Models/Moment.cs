@@ -34,7 +34,7 @@ namespace Moments_Backend.Models
 
         [DefaultValue("teste")]
         [Column("image_path")]
-        [JsonProperty("image_path")]
+        [JsonProperty("image_path", NullValueHandling = NullValueHandling.Ignore)]
         public string? ImagePath { get; set; }
 
         [Column("created_at")]
@@ -50,21 +50,10 @@ namespace Moments_Backend.Models
         [JsonProperty("comments")]
         public List<Comment>? Comments { get; set; }
 
-  
-        public Moment(int id, string title, string description, string imageURL, string imageName, DateTime createdAt, DateTime updatedAt)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-            ImageURL = imageURL;
-            ImagePath = imageName;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-        }
 
         public Moment()
         {
-            Comments= new List<Comment>();
+            Comments??= new List<Comment>();
         }
 
         public Moment(int id, string title, string description, string? imageURL, DateTime createdAt)
@@ -74,6 +63,11 @@ namespace Moments_Backend.Models
             Description = description;
             ImageURL = imageURL;
             CreatedAt = createdAt;
+        }
+
+        public Moment(int id, string title, string description, string? imageURL, DateTime createdAt, List<Comment>? comments) : this(id, title, description, imageURL, createdAt)
+        {
+            Comments = comments;
         }
 
         public override string? ToString()

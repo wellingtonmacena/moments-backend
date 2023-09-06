@@ -8,7 +8,7 @@ namespace Moments_Backend.Repositories
     public class PostgresMomentRepository : IMomentRepository
     {
         private readonly AppDbContext _appDbContext;
-        //Func<Transaction, Transaction> WhereEmpty = (x) => x;
+
         public PostgresMomentRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
@@ -25,18 +25,8 @@ namespace Moments_Backend.Repositories
         public List<Moment> GetAll()
         {
             List<Moment> moments = _appDbContext.Moments
-                                                //.Select(item => new Moment(item.Id, item.Title, item.Description, item.ImageURL, item.CreatedAt))
+                                                .Select(item => new Moment(item.Id, item.Title, item.Description, item.ImageURL, item.CreatedAt, item.Comments))
                                                 .ToList();
-
-            //foreach (Moment moment in moments)
-            //{
-            //    List<Comment> comments = _appDbContext.Comments
-            //                                      .Where(item => item.MomentId.Equals(moment.Id))
-            //                                      //.Select(item => new Comment(item.Id, item.Text, item.CreatedAt))
-            //                                      .ToList();
-
-            //    moment.Comments = comments;
-            //}
 
             return moments;
         }

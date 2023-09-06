@@ -9,13 +9,9 @@ namespace Moments_Backend.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            string connectionString = _configuration.GetValue<string>("MomentsDatabase:ConnectionStringLocal");
-            NpgsqlDataSourceBuilder npgsqlDataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-            var dataSourceBuilder = npgsqlDataSourceBuilder;
-            NpgsqlDataSource dataSource = dataSourceBuilder.Build();
-            optionsBuilder.UseNpgsql(dataSource);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

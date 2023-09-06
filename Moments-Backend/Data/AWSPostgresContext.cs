@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moments_Backend.Models;
 using Npgsql;
 
 namespace Moments_Backend.Data
@@ -17,6 +18,11 @@ namespace Moments_Backend.Data
             NpgsqlDataSource dataSource = dataSourceBuilder.Build();
             optionsBuilder.UseNpgsql(dataSource);
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
