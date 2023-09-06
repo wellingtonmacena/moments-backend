@@ -9,16 +9,7 @@ namespace Moments_Backend.Models
     [Table("comments")]
     public class Comment
     {
-        public Comment(int id, string text, DateTime createdAt)
-        {
-            Id = id;
-            Text = text;
-            CreatedAt = createdAt;
-        }
-
-        public Comment()
-        {
-        }
+        
 
         [Key]
         [Column("id")]
@@ -51,6 +42,20 @@ namespace Moments_Backend.Models
         [DefaultValue("2023-08-27 16:54:20.644 -0300")]
         [Column("updated_at")]
         public DateTime UpdatedAt { get; set; }
+
+        public Comment()
+        {
+        }
+
+        public Comment(int id, string username, string text, int momentId, DateTime createdAt, DateTime updatedAt)
+        {
+            Id = id;
+            Username = username;
+            Text = text;
+            MomentId = momentId;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+        }
 
         public override string? ToString()
         {

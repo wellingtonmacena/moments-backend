@@ -14,12 +14,18 @@ namespace Moments_Backend.Repositories
             _appDbContext = appDbContext;
         }
 
-        public Moment CreateOne(Moment moment)
+        public async Task CreateOne(Moment moment)
         {
             _appDbContext.Moments.Add(moment);
-            _appDbContext.SaveChanges();
+            await _appDbContext.SaveChangesAsync();
+        }
 
-            return moment;
+        public List<Comment> GetCommentsByMomentId(string momentId)
+        {
+            List<Comment> comments = _appDbContext.Comments
+                                                  .ToList()
+                                                  .Where(item => item.MomentId.Equals(momentId)).ToList();
+            return comments;
         }
 
         public List<Moment> GetAll()
@@ -85,6 +91,12 @@ namespace Moments_Backend.Repositories
             _appDbContext.Moments.ExecuteDelete();
             _appDbContext.SaveChanges();
             return true;
+        }
+
+        public async Task CreateOneComment(Comment comment)
+        {
+            _appDbContext.Comments.Add(comment);
+            await _appDbContext.SaveChangesAsync();           
         }
     }
 }

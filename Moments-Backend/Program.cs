@@ -110,8 +110,7 @@ void ConfigureServices(IServiceCollection services)
     //    opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql;
     //});
 
-    builder.Services.AddDbContext<AppDbContext, LocalPostgresContext>(ServiceLifetime.Singleton);
-    builder.Services.AddSingleton<ICommentRepository, PostgresCommentRepository>();
+    builder.Services.AddDbContext<AppDbContext, LocalPostgresContext>(ServiceLifetime.Transient);
     builder.Services.AddSingleton<IMomentRepository, PostgresMomentRepository>();
     builder.Services.AddSingleton<IHandleFile, LocalHandleFileService>();
 }

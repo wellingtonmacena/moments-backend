@@ -51,9 +51,21 @@ namespace Moments_Backend.Controllers
             HandleFileDTO handleFileDTO = await _iHandleFileService.Save(image);
             moment.SetCreationInfo(handleFileDTO);
 
-            _postgresMomentRepository.CreateOne(moment);
+            await _postgresMomentRepository.CreateOne(moment);
 
             return Created("", moment);
+        }
+
+        [HttpPost]
+        [Route("{id}/comments")]
+        public async Task<ActionResult> CreateOneComment([FromBody] Comment comment)
+        {
+            if (comment.MomentId == null)
+                StatusCode(406, "MomentId is null or empty");
+
+            await _postgresMomentRepository.CreateOneComment(comment);
+
+            return Created("", new { data = comment });
         }
 
         [HttpPut]

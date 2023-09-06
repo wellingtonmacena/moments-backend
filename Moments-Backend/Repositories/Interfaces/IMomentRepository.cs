@@ -6,9 +6,11 @@ namespace Moments_Backend.Repositories.Interfaces
     {
         Moment GetOne(int id);
         List<Moment> GetAll();
-        Moment CreateOne(Moment moment);
+        List<Comment> GetCommentsByMomentId(string id);
+        Task CreateOne(Moment moment);
         bool UpdateOne(Moment moment);
         Moment DeleteOne(int id);
         bool DeleteAll();
+        Task CreateOneComment(Comment comment);
     }
 }
