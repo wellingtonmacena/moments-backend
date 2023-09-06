@@ -5,9 +5,8 @@ namespace Moments_Backend.Data
 {
     public class AWSPostgresContext: AppDbContext
     {
-        public AWSPostgresContext(IConfiguration configuration)
+        public AWSPostgresContext(IConfiguration configuration) : base(configuration)
         {
-            _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

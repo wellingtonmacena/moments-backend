@@ -64,6 +64,7 @@ namespace Moments_Backend.Models
 
         public Moment()
         {
+            Comments= new List<Comment>();
         }
 
         public Moment(int id, string title, string description, string? imageURL, DateTime createdAt)

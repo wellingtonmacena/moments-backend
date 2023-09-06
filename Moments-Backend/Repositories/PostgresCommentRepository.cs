@@ -2,15 +2,16 @@
 using Moments_Backend.Data;
 using Moments_Backend.Models;
 using Moments_Backend.Repositories.Interfaces;
+using System;
 
 namespace Moments_Backend.Repositories
 {
     public class PostgresCommentRepository: ICommentRepository
     {
         private readonly AppDbContext _appDbContext;
-        public PostgresCommentRepository(IConfiguration configuration)
+        public PostgresCommentRepository(AppDbContext appDbContext)
         {
-            _appDbContext = new LocalPostgresContext(configuration);
+            _appDbContext = appDbContext;
         }
 
         public Comment CreateOne(Comment comment)

@@ -28,15 +28,15 @@ namespace Moments_Backend.Repositories
                                                 //.Select(item => new Moment(item.Id, item.Title, item.Description, item.ImageURL, item.CreatedAt))
                                                 .ToList();
 
-            foreach (Moment moment in moments)
-            {
-                List<Comment> comments = _appDbContext.Comments
-                                                  .Where(item => item.MomentId.Equals(moment.Id))
-                                                  //.Select(item => new Comment(item.Id, item.Text, item.CreatedAt))
-                                                  .ToList();
+            //foreach (Moment moment in moments)
+            //{
+            //    List<Comment> comments = _appDbContext.Comments
+            //                                      .Where(item => item.MomentId.Equals(moment.Id))
+            //                                      //.Select(item => new Comment(item.Id, item.Text, item.CreatedAt))
+            //                                      .ToList();
 
-                moment.Comments = comments;
-            }
+            //    moment.Comments = comments;
+            //}
 
             return moments;
         }

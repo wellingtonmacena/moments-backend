@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Moments_Backend.Models
 {
@@ -53,7 +54,16 @@ namespace Moments_Backend.Models
 
         public override string? ToString()
         {
-            return base.ToString();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"{{Id: {Id},  ");
+            stringBuilder.AppendLine($"Username: {Username},  ");
+            stringBuilder.AppendLine($"Text: {Text},  ");
+            stringBuilder.AppendLine($"MomentId: {MomentId},  ");
+            stringBuilder.AppendLine($"CreatedAt: {CreatedAt},  ");
+            stringBuilder.AppendLine($"UpdatedAt: {UpdatedAt}}}");
+
+            return stringBuilder.ToString();
+
         }
     }
 }

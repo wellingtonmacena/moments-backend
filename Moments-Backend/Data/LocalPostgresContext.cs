@@ -5,9 +5,8 @@ namespace Moments_Backend.Data
 {
     public class LocalPostgresContext: AppDbContext
     {
-        public LocalPostgresContext(IConfiguration configuration)
+        public LocalPostgresContext(IConfiguration configuration):base(configuration)
         {
-            _configuration = configuration;
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
