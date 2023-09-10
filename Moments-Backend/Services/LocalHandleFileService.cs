@@ -1,6 +1,7 @@
 ﻿using Moments_Backend.Interfaces;
 using Moments_Backend.Models.DTOs;
 using Moments_Backend.Utils;
+using SharpCompress.Common;
 
 namespace Moments_Backend.Services
 {
@@ -38,7 +39,18 @@ namespace Moments_Backend.Services
             {
                 return Task.FromResult(false);
             }
-        }    
+        }
+
+        public Task<bool> DeleteAll()
+        {
+            string[] files = Directory.GetFiles(Path.Combine(Environment.CurrentDirectory, "Uploads"));
+            foreach (string file in files)
+            {
+                File.Delete(file);
+            }
+
+            return Task.FromResult(true);
+        }
     }
 }
 

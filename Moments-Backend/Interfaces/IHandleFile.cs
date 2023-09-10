@@ -6,5 +6,6 @@ namespace Moments_Backend.Interfaces
     {
         Task<HandleFileDTO> Save(IFormFile imageFile);
         Task<bool> Delete(string filepath);
+        Task<bool> DeleteAll();
     }
 }

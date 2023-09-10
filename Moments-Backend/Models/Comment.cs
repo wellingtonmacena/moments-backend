@@ -29,6 +29,7 @@ namespace Moments_Backend.Models
         public string Text { get; set; }
 
         [DefaultValue(0)]
+        [JsonIgnore]
         [Column("moment_id")]
         [JsonProperty("moment_id")]
         public int MomentId { get; set; }
@@ -55,6 +56,12 @@ namespace Moments_Backend.Models
             MomentId = momentId;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
+        }
+
+        public void SetCreationInfo()
+        {
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = CreatedAt;
         }
 
         public override string? ToString()

@@ -49,12 +49,34 @@ namespace Moments_Backend.Controllers
                 return StatusCode(415, new { Message = "Only accepts image type file" });
 
             HandleFileDTO handleFileDTO = await _iHandleFileService.Save(image);
-            moment.SetCreationInfo(handleFileDTO);
+            moment.SetImageInfo(handleFileDTO);
+            moment.SetCreationInfo();         
 
             await _postgresMomentRepository.CreateOne(moment);
 
             return Created("", moment);
         }
+
+        //[HttpPost]
+        //[Route("CreateHundred")]
+        //public async Task<ActionResult> CreateHundred([FromForm] Moment moment)
+        //{
+        //    List<Moment> moments = new List<Moment>();
+        //    for (int i = 0; i < 100; i++)
+        //    {
+        //        Moment moment1 = new Moment()
+        //        {
+        //            Title = moment.Title,
+        //            Description = moment.Description,
+        //        };
+        //        moment1.SetCreationInfo(new("", ""));
+        //        moments.Add(moment1);
+                 
+        //    }
+        //    await _postgresMomentRepository.CreateMany(moments);
+
+        //    return Created("", moments);
+        //}
 
         [HttpPost]
         [Route("{id}/comments")]
@@ -63,12 +85,14 @@ namespace Moments_Backend.Controllers
             if (comment.MomentId == null)
                 StatusCode(406, "MomentId is null or empty");
 
+            comment.SetCreationInfo();
             await _postgresMomentRepository.CreateOneComment(comment);
 
             return Created("", new { data = comment });
         }
 
         [HttpPut]
+        [Route("{id}")]
         public ActionResult UpdateOne([FromForm] Moment moment)
         {
             bool wasUpdated = _postgresMomentRepository.UpdateOne(moment);
@@ -94,13 +118,21 @@ namespace Moments_Backend.Controllers
                 _iHandleFileService.Delete(moment.ImagePath);
                 return Ok();
             }
-
         }
 
         //[HttpDelete]
         //public ActionResult DeleteAll()
         //{
-        //    // return Ok(_postgresCommentRepository.DeleteAll());
+        //    try
+        //    {
+        //        _postgresMomentRepository.DeleteAll();
+        //        _iHandleFileService.DeleteAll();
+        //        return Ok();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex);
+        //    }
         //}
     }
 }

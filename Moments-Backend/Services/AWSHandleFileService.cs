@@ -1,9 +1,12 @@
 ﻿using Amazon;
 using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Moments_Backend.Interfaces;
 using Moments_Backend.Models.DTOs;
 using Moments_Backend.Utils;
+using SharpCompress.Common;
+using System.Diagnostics;
 
 namespace Moments_Backend.Services
 {
@@ -62,6 +65,44 @@ namespace Moments_Backend.Services
                 await transferUtility.S3Client.DeleteObjectAsync(_bucketName, filepath);
                 return true;
             }
+        }
+
+        public async Task<bool> DeleteAll()
+        {
+            try
+            {
+                using (var amazonS3client = new AmazonS3Client(_accessKeyId, _secretKeyId, RegionEndpoint.USEast2))
+                {
+                    var request = new ListObjectsRequest
+                    {
+                        BucketName = _bucketName
+                    };
+
+                    var response = await amazonS3client.ListObjectsAsync(request);
+                    var keys = new List<KeyVersion>();
+                    foreach (var item in response.S3Objects)
+                    {
+                        // Here you can provide VersionId as well.
+                        keys.Add(new KeyVersion { Key = item.Key });
+                        Debug.WriteLine(item.Key);
+                    }
+
+                    var multiObjectDeleteRequest = new DeleteObjectsRequest()
+                    {
+                        BucketName = _bucketName,
+                        Objects = keys
+                    };
+
+                    var deleteObjectsResponse = await amazonS3client.DeleteObjectsAsync(multiObjectDeleteRequest);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+            
         }
     }
 }

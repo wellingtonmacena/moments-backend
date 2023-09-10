@@ -84,12 +84,16 @@ namespace Moments_Backend.Models
             return stringBuilder.ToString();
         }
 
-        public void SetCreationInfo(HandleFileDTO handleFileDTO)
+        public void SetCreationInfo()
+        {
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = CreatedAt;
+        }
+
+        public void SetImageInfo(HandleFileDTO handleFileDTO)
         {
             ImageURL = handleFileDTO.ImageURL;
             ImagePath = handleFileDTO.ImagePath;
-            CreatedAt = DateTime.UtcNow;
-            UpdatedAt = CreatedAt;
         }
     }
 }

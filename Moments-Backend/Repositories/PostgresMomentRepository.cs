@@ -20,14 +20,6 @@ namespace Moments_Backend.Repositories
             await _appDbContext.SaveChangesAsync();
         }
 
-        public List<Comment> GetCommentsByMomentId(string momentId)
-        {
-            List<Comment> comments = _appDbContext.Comments
-                                                  .ToList()
-                                                  .Where(item => item.MomentId.Equals(momentId)).ToList();
-            return comments;
-        }
-
         public List<Moment> GetAll()
         {
             List<Moment> moments = _appDbContext.Moments
@@ -39,19 +31,17 @@ namespace Moments_Backend.Repositories
 
         public Moment GetOne(int id)
         {
-            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
-
-            foundMoment.Comments = _appDbContext.Comments
-                                                  .ToList()
-                                                  .Where(item => item.MomentId.Equals(foundMoment.Id))
-                                                  .ToList();
+            Moment foundMoment = _appDbContext.Moments
+                                  .First(item => item.Id.Equals(id));
 
             return foundMoment;
         }
 
         public bool UpdateOne(Moment moment)
         {
-            Moment foundMoment = _appDbContext.Moments.First(item => item.Id.Equals(moment.Id));
+            Moment foundMoment = _appDbContext
+                                  .Moments
+                                  .First(item => item.Id.Equals(moment.Id));
 
             if (foundMoment != null)
             {
@@ -71,7 +61,9 @@ namespace Moments_Backend.Repositories
 
         public Moment DeleteOne(int id)
         {
-            Moment foundMoment = _appDbContext.Moments.ToList().Find(item => item.Id.Equals(id));
+            Moment foundMoment = _appDbContext
+                                  .Moments
+                                  .First(item => item.Id.Equals(id));
 
             if (foundMoment != null)
             {
@@ -96,7 +88,15 @@ namespace Moments_Backend.Repositories
         public async Task CreateOneComment(Comment comment)
         {
             _appDbContext.Comments.Add(comment);
-            await _appDbContext.SaveChangesAsync();           
+            await _appDbContext.SaveChangesAsync();
+        }
+
+        public async Task CreateMany(List<Moment> moments)
+        {
+            _appDbContext.Moments.AddRangeAsync(moments);
+            await _appDbContext.SaveChangesAsync();
+
+           
         }
     }
 }
