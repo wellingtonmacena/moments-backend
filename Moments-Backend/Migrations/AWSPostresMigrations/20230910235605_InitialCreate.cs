@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Moments_Backend.Migrations.AWSPostgresMigrations
+namespace Moments_Backend.Migrations.AWSPostresMigrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

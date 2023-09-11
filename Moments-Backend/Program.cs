@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Moments_Backend.Data;
 using Moments_Backend.Interfaces;
@@ -13,7 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 ConfigureServices(builder.Services);
-
 Configure(builder);
 
 var app = builder.Build();
@@ -110,7 +108,7 @@ void ConfigureServices(IServiceCollection services)
     //    opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql;
     //});
 
-    builder.Services.AddDbContext<AppDbContext, LocalPostgresContext>(ServiceLifetime.Transient);
+    builder.Services.AddDbContext<AppDbContext, AWSPostgresContext>(ServiceLifetime.Transient);
     builder.Services.AddSingleton<IMomentRepository, PostgresMomentRepository>();
-    builder.Services.AddSingleton<IHandleFile, LocalHandleFileService>();
+    builder.Services.AddSingleton<IHandleFile, AWSHandleFileService>();
 }

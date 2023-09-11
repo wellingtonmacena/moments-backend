@@ -19,7 +19,6 @@ namespace BenchmarkTestes.Tests.DatabaseOperations
         public void Setup()
         {
             string occupation = ConfigurationManager.AppSettings["occupation"];
-
         }
 
         [Benchmark]

@@ -19,6 +19,14 @@ namespace Moments_Backend.Controllers
         }
 
         [HttpGet]
+        [Route("/test")]
+        public ActionResult GetTest()
+        {
+
+            return Ok(new { data = "teste" });
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public ActionResult GetOne([FromRoute] int id)
         {
@@ -50,7 +58,7 @@ namespace Moments_Backend.Controllers
 
             HandleFileDTO handleFileDTO = await _iHandleFileService.Save(image);
             moment.SetImageInfo(handleFileDTO);
-            moment.SetCreationInfo();         
+            moment.SetCreationInfo();
 
             await _postgresMomentRepository.CreateOne(moment);
 
@@ -71,7 +79,7 @@ namespace Moments_Backend.Controllers
         //        };
         //        moment1.SetCreationInfo(new("", ""));
         //        moments.Add(moment1);
-                 
+
         //    }
         //    await _postgresMomentRepository.CreateMany(moments);
 
