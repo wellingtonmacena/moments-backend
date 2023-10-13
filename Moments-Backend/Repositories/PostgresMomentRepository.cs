@@ -61,21 +61,29 @@ namespace Moments_Backend.Repositories
 
         public Moment DeleteOne(int id)
         {
-            Moment foundMoment = _appDbContext
+            try
+            {
+                Moment foundMoment = _appDbContext
                                   .Moments
                                   .First(item => item.Id.Equals(id));
 
-            if (foundMoment != null)
-            {
-                _appDbContext.Moments.Remove(foundMoment);
-                _appDbContext.SaveChanges();
+                if (foundMoment != null)
+                {
+                    _appDbContext.Moments.Remove(foundMoment);
+                    _appDbContext.SaveChanges();
 
-                return foundMoment;
+                    return foundMoment;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch (Exception)
             {
                 return null;
             }
+            
         }
 
         public bool DeleteAll()

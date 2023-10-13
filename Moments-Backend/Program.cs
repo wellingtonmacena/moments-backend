@@ -108,7 +108,7 @@ void ConfigureServices(IServiceCollection services)
     //    opt.DbDriverOption = WatchDogDbDriverEnum.PostgreSql;
     //});
 
-    builder.Services.AddDbContext<AppDbContext, AWSPostgresContext>(ServiceLifetime.Transient);
+    builder.Services.AddDbContext<AppDbContext, LocalPostgresContext>(ServiceLifetime.Transient);
     builder.Services.AddSingleton<IMomentRepository, PostgresMomentRepository>();
-    builder.Services.AddSingleton<IHandleFile, AWSHandleFileService>();
+    builder.Services.AddSingleton<IHandleFile, LocalHandleFileService>();
 }
