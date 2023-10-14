@@ -9,10 +9,6 @@ namespace Moments_Backend.Data
         {
         }
 
-        public LocalPostgresContext(string v) : base(v)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

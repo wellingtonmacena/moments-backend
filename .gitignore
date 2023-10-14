@@ -13,7 +13,7 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
-.env
+
 Moments-Backend/Uploads/*
 Moments-Backend/!Uploads/.gitkeep
 # Mono auto generated files

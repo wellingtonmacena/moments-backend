@@ -58,8 +58,8 @@ static void Configure(WebApplicationBuilder builder)
         loggerConfiguration
         .Enrich.FromLogContext()
         .Enrich.WithMachineName()
-        // .WriteTo.Debug()
-        // .WriteTo.Console()
+         .WriteTo.Debug()
+         .WriteTo.Console()
         .Enrich.WithProperty("Environment", environment)
         .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(elasticsearchSettings))
         {

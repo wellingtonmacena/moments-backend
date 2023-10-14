@@ -22,7 +22,6 @@ namespace Moments_Backend.Controllers
         [Route("/test")]
         public ActionResult GetTest()
         {
-
             return Ok(new { data = "teste" });
         }
 
@@ -52,7 +51,6 @@ namespace Moments_Backend.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateOne([FromForm] IFormFile image, [FromForm] Moment moment)
         {
-
             if (!image.ContentType.Contains("image"))
                 return StatusCode(415, new { Message = "Only accepts image type file" });
 
@@ -64,27 +62,6 @@ namespace Moments_Backend.Controllers
 
             return Created("", moment);
         }
-
-        //[HttpPost]
-        //[Route("CreateHundred")]
-        //public async Task<ActionResult> CreateHundred([FromForm] Moment moment)
-        //{
-        //    List<Moment> moments = new List<Moment>();
-        //    for (int i = 0; i < 100; i++)
-        //    {
-        //        Moment moment1 = new Moment()
-        //        {
-        //            Title = moment.Title,
-        //            Description = moment.Description,
-        //        };
-        //        moment1.SetCreationInfo(new("", ""));
-        //        moments.Add(moment1);
-
-        //    }
-        //    await _postgresMomentRepository.CreateMany(moments);
-
-        //    return Created("", moments);
-        //}
 
         [HttpPost]
         [Route("{id}/comments")]
