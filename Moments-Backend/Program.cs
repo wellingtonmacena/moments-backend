@@ -39,6 +39,8 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/Uploads"
 });
 
+Debug.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
+Console.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
 app.MapControllers();
 
 app.Run();

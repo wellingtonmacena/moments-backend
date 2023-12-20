@@ -14,7 +14,7 @@
 *.userprefs
 
 
-
+Moments-Backend/Uploads/*
 Moments-Backend/!Uploads/.gitkeep
 # Mono auto generated files
 mono_crash.*
