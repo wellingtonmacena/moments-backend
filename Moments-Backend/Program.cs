@@ -33,14 +33,15 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseAuthorization();
+Debug.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
+Console.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Environment.CurrentDirectory, "Uploads")),
     RequestPath = "/Uploads"
 });
 
-Debug.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
-Console.WriteLine(Path.Combine(Environment.CurrentDirectory, "Uploads"));
+
 app.MapControllers();
 
 app.Run();
